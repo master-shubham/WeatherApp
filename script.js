@@ -13,7 +13,8 @@ async function checkWheathe(city) {
         document.querySelector('.weather').style.display = "none"
     } else {
 
-        const data = await response.json();
+        try {
+            const data = await response.json();
         document.querySelector('.temp').innerHTML = Math.round(data.main.temp) + "°C";
         document.querySelector('.city').innerHTML = data.name;
         document.querySelector('.humidity').innerHTML = data.main.humidity + '%';
@@ -39,6 +40,9 @@ async function checkWheathe(city) {
         document.querySelector('.errorMsg').style.display = "none"
 
 
+        } catch (error) {
+            console.log(error);   
+        }
     }
 }
 
