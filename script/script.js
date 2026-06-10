@@ -1,5 +1,7 @@
+
+
 // NOTE: This API key is for demo/learning purposes only
-const apiKey = "3f986598a2dec8a39bd934bdfa79d04c";
+const apiKey = import.meta.env.VITE_API_KEY;
 
 const apiUrl =
   "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
@@ -9,14 +11,22 @@ const weatherIcon = document.querySelector(".weather-icon");
 const errorMsg = document.querySelector(".errorMsg");
 
 async function checkWheathe(city) {
+  if (!city || city.trim() === "") {
+    return; // Stop the function from running if there's no city name typed yet
+  }
+
   const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
 
+ 
+  // 2. Clear previous error state before starting a new search
+  errorMsg.style.display = "none";
 
-  if (!response.ok ||searchInput === "" || isNaN(searchInput)) {
+  if (!response.ok) {
     errorMsg.style.display = "block";
-    weatherIcon.style.display = "none";
-    searchInput.value="";
-    
+    weatherIcon.style.display = "none"; 
+    document.querySelector(".weather").style.display = "none";
+    searchInput.value = "";
+    return;
   } else {
     try {
       const data = await response.json();
@@ -40,8 +50,9 @@ async function checkWheathe(city) {
 
       document.querySelector(".weather").style.display = "block";
       document.querySelector(".errorMsg").style.display = "none";
+
     } catch (error) {
-      console.log(error);
+      errorMsg.style.display = "block";
     }
   }
 }
